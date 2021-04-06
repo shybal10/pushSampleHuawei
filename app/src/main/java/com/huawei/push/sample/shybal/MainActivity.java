@@ -2,6 +2,9 @@ package com.huawei.push.sample.shybal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -15,7 +18,7 @@ import com.huawei.agconnect.config.AGConnectServicesConfig;
 import com.huawei.hms.aaid.HmsInstanceId;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnToken;
+    Button btnToken,btnCopy;
     public static final String TAG = "Push Sample";
     String pushtoken;
 
@@ -24,15 +27,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnToken = findViewById(R.id.btn_get_token);
+        btnCopy = findViewById(R.id.btn_copy_token);
         btnToken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getToken();
             }
         });
+        btnCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyToken();
+            }
+        });
 
     }
 
+    private void copyToken() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Device Token", pushtoken);
+        clipboard.setPrimaryClip(clip);
+    }
 
 
     private void showLog(final String log) {
